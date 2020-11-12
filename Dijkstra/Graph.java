@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
+@SuppressWarnings("all")
 public class Graph {
 
     private String filename;
@@ -138,11 +139,45 @@ public class Graph {
         }
 
         // Return longest weight in internal graph and external graph's nodes;
-        Object[] returnObj = new Object[2];
+        Object[] returnObj = new Object[3];
         returnObj[0] = longest;
         returnObj[1] = externalNodes;
+        returnObj[2] = routeEdges;
 
         return returnObj;
+    }
+
+    public static void printResult(int pivot, Object obj) {
+        Edge[] routeEdges = null;
+        try {
+            routeEdges = (Edge[]) obj;
+        } catch (Exception e) {
+            System.out.println("Error!(method : printResult)");
+            System.out.println("You should check that input type is Edge[].");
+            return;
+        }
+        // Find external graph's nodes.
+        List<Integer> externalNodes = new ArrayList<>();
+        int longest = 0;
+
+        System.out.println("+++++ Shortest Path +++++");
+        for (int i = 0; i < routeEdges.length; i++) {
+            if (routeEdges[i].weight != Integer.MAX_VALUE) {
+                System.out.printf("From %d To %d : %d\n", pivot, routeEdges[i].dst, routeEdges[i].weight);
+                if (longest < routeEdges[i].weight) {
+                    longest = routeEdges[i].weight;
+                }
+            } else {
+                externalNodes.add(routeEdges[i].dst);
+            }
+        }
+        System.out.println();
+        System.out.printf("From node(%d)\n", pivot);
+        System.out.printf("longest shortest path : %d\n", longest);
+
+        System.out.println();
+        System.out.println("+++++ External node +++++");
+        System.out.println(externalNodes);
 
     }
 
