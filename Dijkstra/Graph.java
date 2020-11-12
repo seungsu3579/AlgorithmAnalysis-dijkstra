@@ -148,6 +148,9 @@ public class Graph {
     }
 
     public static void printResult(int pivot, Object obj) {
+        // int pivot : start point of Dijkstra
+        // Object obj : type is Edge[], finded shortest route array
+        // (= return[2] of dijkstra method)
         Edge[] routeEdges = null;
         try {
             routeEdges = (Edge[]) obj;
