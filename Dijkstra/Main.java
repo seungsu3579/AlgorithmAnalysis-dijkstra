@@ -16,11 +16,7 @@ public class Main {
 
         // Find longest shortest path from pivot
         Object[] obj = g.dijkstra(pivot);
-        int longest = (Integer) obj[0];
-        List<Integer> external = (List<Integer>) obj[1];
-
-        System.out.println(longest);
-        // System.out.println(external);
+        Graph.printResult(pivot, obj[2]);
 
     }
 
@@ -39,4 +35,13 @@ public class Main {
 
     }
 
+}
+
+class FindLS {
+    public FindLS() {
+    }
+
+    public static void findLongestShortestPath() {
+
+    }
 }

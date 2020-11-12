@@ -14,6 +14,7 @@ public class Graph {
     private int nodeNum;
     private List<Edge>[] graph;
 
+    // Constructor
     public Graph(String filename, int nodeNum) {
         this.filename = filename;
         this.nodeNum = nodeNum;
@@ -145,6 +146,16 @@ public class Graph {
         returnObj[2] = routeEdges;
 
         return returnObj;
+    }
+
+    public static int longest(Object obj) {
+        int value = (Integer) obj;
+        return value;
+    }
+
+    public static List<Integer> externalNodes(Object obj) {
+        List<Integer> external = (List<Integer>) obj;
+        return external;
     }
 
     public static void printResult(int pivot, Object obj) {
