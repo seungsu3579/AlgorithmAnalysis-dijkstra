@@ -12,11 +12,13 @@ public class Main {
         int pivot = 10;
         String filename = String.format("./%d.graph", nodeNum);
 
-        Graph g = new Graph(filename, nodeNum);
+        Graph graph = new Graph(filename, nodeNum);
 
         // Find longest shortest path from pivot
-        Object[] obj = g.dijkstra(pivot);
-        Graph.printResult(pivot, obj[2]);
+        Object[] obj = graph.dijkstra(pivot);
+
+        int longest = Graph.longest(obj[0]);
+        List<Integer> externals = Graph.externalNodes(obj[1]);
 
     }
 
@@ -41,7 +43,7 @@ class FindLS {
     public FindLS() {
     }
 
-    public static void findLongestShortestPath() {
+    public static void findLongestShortestPath(Graph graph) {
 
     }
 }
