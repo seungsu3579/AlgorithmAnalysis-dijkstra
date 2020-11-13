@@ -122,17 +122,17 @@ public class Graph {
             flag[route.dst] = true;
         }
 
-        // Find external graph's nodes.
+        // Find internal, external graph's nodes.
+        List<Integer> internalNodes = new ArrayList<>();
         List<Integer> externalNodes = new ArrayList<>();
-        int longest = 0;
+        Edge longest = new Edge(-1, -1, -1);
 
         for (int i = 0; i < routeEdges.length; i++) {
             //
             if (routeEdges[i].weight != Integer.MAX_VALUE) {
-                // System.out.printf("From %d To %d : %d\n", pivot, routeEdges[i].dst,
-                // routeEdges[i].weight);
-                if (longest < routeEdges[i].weight) {
-                    longest = routeEdges[i].weight;
+                internalNodes.add(routeEdges[i].dst);
+                if (longest.weight < routeEdges[i].weight) {
+                    longest = routeEdges[i];
                 }
             } else {
                 externalNodes.add(routeEdges[i].dst);
@@ -140,17 +140,23 @@ public class Graph {
         }
 
         // Return longest weight in internal graph and external graph's nodes;
-        Object[] returnObj = new Object[3];
-        returnObj[0] = longest;
+        Object[] returnObj = new Object[4];
+        returnObj[0] = internalNodes;
         returnObj[1] = externalNodes;
         returnObj[2] = routeEdges;
+        returnObj[3] = longest;
 
         return returnObj;
     }
 
-    public static int longest(Object obj) {
-        int value = (Integer) obj;
-        return value;
+    public static Edge longest(Object obj) {
+        Edge edge = (Edge) obj;
+        return edge;
+    }
+
+    public static List<Integer> internalNodes(Object obj) {
+        List<Integer> internal = (List<Integer>) obj;
+        return internal;
     }
 
     public static List<Integer> externalNodes(Object obj) {
