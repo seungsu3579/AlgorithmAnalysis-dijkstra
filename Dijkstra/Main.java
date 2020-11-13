@@ -42,7 +42,6 @@ public class Main {
     public static void findLongestShortestPath(Graph graph) {
 
         int random_pivot = (int) (Math.random() * graph.getNodeNum());
-        System.out.printf("첫 랜덤 피벗 : %d\n", random_pivot);
 
         CheckTable table = new CheckTable(graph.getNodeNum());
 
@@ -53,7 +52,6 @@ public class Main {
             Object[] obj = graph.dijkstra(random_pivot);
 
             List<Integer> internals = Graph.internalNodes(obj[0]);
-            List<Integer> externals = Graph.externalNodes(obj[1]);
             Edge longest = Graph.longest(obj[3]);
 
             result.add(longest);
@@ -62,13 +60,11 @@ public class Main {
             table.check(internals);
 
             // Choose random node in external graph
-            random_pivot = externals.get((int) (Math.random() * externals.size()));
+            random_pivot = table.getUnchecked();
 
-            System.out.printf("검사한 노드 수 : %d\n", table.getCount());
-            System.out.printf("남은 노드 수 : %d\n", table.getTableSize() - table.getCount());
-            System.out.println();
+            System.out.printf("검사한 노드 수 : %d    남은 노드 수 : %d\r", table.getCount(),
+                    table.getTableSize() - table.getCount());
         }
-
         System.out.println("모두 조사 완료!");
 
     }

@@ -34,7 +34,7 @@ public class CheckTable {
 
     public int getUnchecked() {
         if (this.count != this.tableSize) {
-            for (int i = 0; i < this.tableSize; i++) {
+            for (int i = this.tableSize - 1; i >= 0; i--) {
                 if (!this.table[i]) {
                     return i;
                 }
