@@ -68,7 +68,7 @@ public class Main {
             int d = (int) ((table.getCount() * 100 / table.getTableSize()));
 
             System.out.printf(" Progress : %7d/%7d ( %3d )  | ", table.getCount(), table.getTableSize(), d);
-            System.out.printf("Longest Shortest Path : %20s \r", e);
+            System.out.printf("Longest Shortest Path : %20s \n", e);
         }
 
         System.out.printf("\n\n");

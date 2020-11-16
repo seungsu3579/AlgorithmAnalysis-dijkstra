@@ -32,6 +32,16 @@ public class CheckTable {
         return this.table[idx];
     }
 
+    public int getUncheckedRandom() {
+        while (true) {
+            int i = (int) (Math.random() * 10);
+            if (!this.table[i]) {
+                return i;
+            }
+        }
+
+    }
+
     public int getUnchecked() {
         if (this.count != this.tableSize) {
             for (int i = this.tableSize - 1; i >= 0; i--) {
