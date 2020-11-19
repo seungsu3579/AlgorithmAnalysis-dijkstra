@@ -2,12 +2,11 @@ package Dijkstra;
 
 import java.util.PriorityQueue;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Collections;
 import java.util.Comparator;
 
-// @SuppressWarnings("all")
+@SuppressWarnings("all")
 public class Main {
 
     public static void main(String[] args) {
