@@ -17,32 +17,63 @@ public class Main {
 
         Graph graph = new Graph(filename, nodeNum);
 
-        flsp_print(graph);
+        heuristic_flsp_print(graph);
+        // flsp_print(graph);
 
     }
 
-    // Show how many edges in node.
-    public static void statistic(Graph graph) {
+    public static void heuristic_flsp_print(Graph graph) {
 
-        List<Edge>[] g = graph.getGraph();
+        // 16000 19s
+        // 32000 2m 37s
 
-        List<Node> count = new ArrayList<Node>();
-        for (int i = 0; i < graph.getNodeNum(); i++) {
-            count.add(new Node(i, g[i].size()));
+        PriorityQueue<Edge> result = new PriorityQueue<>(Comparator.reverseOrder());
+        PriorityQueue<Edge> search_order = graph.getHeuristic_order();
+
+        CheckTable table = new CheckTable(graph.getNodeNum());
+
+        while (!table.isAllChecked()) {
+
+            Edge edge = search_order.poll();
+
+            if (!table.show(edge.dst)) {
+                int pivot = edge.dst;
+                Object[] obj = graph.dijkstra(pivot);
+
+                List<Integer> internals = Graph.internalNodes(obj[0]);
+                Edge longest = Graph.longest(obj[3]);
+
+                result.add(longest);
+                Edge e = result.peek();
+
+                // Check inspected Nodes.
+                table.check(internals);
+
+                int d = (int) ((table.getCount() * 100 / table.getTableSize()));
+
+                System.out.printf(" Progress : %7d/%7d ( %3d )  | ", table.getCount(), table.getTableSize(), d);
+                System.out.printf("Longest Shortest Path : %20s \n", e);
+
+            }
+
         }
 
-        // Collections.sort(count);
-        Collections.sort(count, Collections.reverseOrder());
+        System.out.printf("\n\n");
+
+        System.out.println("+++++ longest shortest path rank +++++");
 
         for (int i = 0; i < 20; i++) {
-            System.out.println(count.get(i));
+            Edge edge = result.poll();
+            System.out.printf(" %-2d. %s\n", i + 1, edge);
         }
+
+        System.out.println("\nComplete!\n");
 
     }
 
     public static void flsp_print(Graph graph) {
 
-        int random_pivot = (int) (Math.random() * graph.getNodeNum());
+        int pivot = (int) (Math.random() * graph.getNodeNum());
 
         CheckTable table = new CheckTable(graph.getNodeNum());
 
@@ -51,7 +82,7 @@ public class Main {
         System.out.println("\n+++++ calculating +++++");
         while (!table.isAllChecked()) {
 
-            Object[] obj = graph.dijkstra(random_pivot);
+            Object[] obj = graph.dijkstra(pivot);
 
             List<Integer> internals = Graph.internalNodes(obj[0]);
             Edge longest = Graph.longest(obj[3]);
@@ -62,13 +93,13 @@ public class Main {
             // Check inspected Nodes.
             table.check(internals);
 
-            // Choose random node in external graph
-            random_pivot = table.getUnchecked();
+            // Choose node in external graph
+            pivot = table.getUnchecked();
 
             int d = (int) ((table.getCount() * 100 / table.getTableSize()));
 
             System.out.printf(" Progress : %7d/%7d ( %3d )  | ", table.getCount(), table.getTableSize(), d);
-            System.out.printf("Longest Shortest Path : %20s \n", e);
+            System.out.printf("Longest Shortest Path : %20s \r", e);
         }
 
         System.out.printf("\n\n");
@@ -86,7 +117,7 @@ public class Main {
 
     public static void findLongestShortestPath(Graph graph) {
 
-        int random_pivot = (int) (Math.random() * graph.getNodeNum());
+        int pivot = (int) (Math.random() * graph.getNodeNum());
 
         CheckTable table = new CheckTable(graph.getNodeNum());
 
@@ -94,7 +125,7 @@ public class Main {
 
         while (!table.isAllChecked()) {
 
-            Object[] obj = graph.dijkstra(random_pivot);
+            Object[] obj = graph.dijkstra(pivot);
 
             List<Integer> internals = Graph.internalNodes(obj[0]);
             Edge longest = Graph.longest(obj[3]);
@@ -105,7 +136,7 @@ public class Main {
             table.check(internals);
 
             // Choose random node in external graph
-            random_pivot = table.getUnchecked();
+            pivot = table.getUnchecked();
 
             System.out.printf("검사한 노드 수 : %7d      남은 노드 수 : %7d\r", table.getCount(),
                     table.getTableSize() - table.getCount());
@@ -137,27 +168,6 @@ public class Main {
         // Print Results
         Graph.printResult(pivot, obj[2]);
 
-    }
-
-}
-
-class Node implements Comparable<Node> {
-    int src;
-    int edgeNum;
-
-    public Node(int src, int edgeNum) {
-        this.src = src;
-        this.edgeNum = edgeNum;
-    }
-
-    @Override
-    public int compareTo(Node other) {
-        return Integer.compare(this.edgeNum, other.edgeNum);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("src : %d    num : %d", this.src, this.edgeNum);
     }
 
 }

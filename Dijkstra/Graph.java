@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
+import java.util.Comparator;
 
 @SuppressWarnings("all")
 public class Graph {
@@ -13,6 +14,7 @@ public class Graph {
     private String filename;
     private int nodeNum;
     private List<Edge>[] graph;
+    private PriorityQueue<Edge> heuristic_order;
 
     // Constructor
     public Graph(String filename, int nodeNum) {
@@ -33,10 +35,18 @@ public class Graph {
         return graph;
     }
 
+    public PriorityQueue<Edge> getHeuristic_order() {
+        return heuristic_order;
+    }
+
     public List<Edge>[] readGraph(String filename, int nodeNum) {
+        Edge[] tmp = new Edge[nodeNum];
+        PriorityQueue<Edge> heuristic_order = new PriorityQueue<>();
         List<Edge>[] graph = new ArrayList[nodeNum];
+
         for (int i = 0; i < graph.length; i++) {
             graph[i] = new ArrayList<Edge>();
+            tmp[i] = new Edge(i, i, 0);
         }
 
         try {
@@ -54,6 +64,7 @@ public class Graph {
 
                 // System.out.printf("%d - %d : %d\n", src, dst, weight);
                 graph[src].add(new Edge(dst, weight));
+                tmp[dst].weight += 1;
 
             }
             buffer.close();
@@ -61,7 +72,51 @@ public class Graph {
         } catch (Exception e) {
             System.out.println(e);
         }
+
+        // for heuristic order to num3
+        for (int i = 0; i < nodeNum; i++) {
+            heuristic_order.add(tmp[i]);
+        }
+        this.heuristic_order = heuristic_order;
+
         return graph;
+    }
+
+    public static PriorityQueue<Edge> directionCount(String filename, int nodeNum) {
+        Edge[] graph = new Edge[nodeNum];
+        PriorityQueue<Edge> result = new PriorityQueue<>();
+
+        for (int i = 0; i < nodeNum; i++) {
+            graph[i] = new Edge(i, i, 0);
+        }
+
+        try {
+            File graph_file = new File(filename);
+            FileReader filereader = new FileReader(graph_file);
+            BufferedReader buffer = new BufferedReader(filereader);
+
+            String line = "";
+            while ((line = buffer.readLine()) != null) {
+                String[] data = line.split(" ");
+
+                int src = Integer.parseInt(data[0]);
+                int dst = Integer.parseInt(data[1]);
+                int weight = Integer.parseInt(data[2]);
+
+                graph[dst].weight += 1;
+
+            }
+            buffer.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        for (int i = 0; i < nodeNum; i++) {
+            result.add(graph[i]);
+        }
+
+        return result;
     }
 
     public Object[] dijkstra(int pivot) {
