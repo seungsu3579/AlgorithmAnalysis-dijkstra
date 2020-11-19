@@ -16,12 +16,12 @@ public class Main {
 
         Graph graph = new Graph(filename, nodeNum);
 
-        heuristic_flsp_print(graph);
-        // flsp_print(graph);
+        heuristic_findLongestShortestPath(graph);
+        // findLongestShortestPath(graph);
 
     }
 
-    public static void heuristic_flsp_print(Graph graph) {
+    public static void heuristic_findLongestShortestPath(Graph graph) {
 
         // 16000 19s
         // 32000 2m 37s
@@ -51,7 +51,7 @@ public class Main {
                 int d = (int) ((table.getCount() * 100 / table.getTableSize()));
 
                 System.out.printf(" Progress : %7d/%7d ( %3d )  | ", table.getCount(), table.getTableSize(), d);
-                System.out.printf("Longest Shortest Path : %20s \n", e);
+                System.out.printf("Longest Shortest Path : %20s \r", e);
 
             }
 
@@ -70,7 +70,7 @@ public class Main {
 
     }
 
-    public static void flsp_print(Graph graph) {
+    public static void findLongestShortestPath(Graph graph) {
 
         int pivot = (int) (Math.random() * graph.getNodeNum());
 
@@ -111,46 +111,6 @@ public class Main {
         }
 
         System.out.println("\nComplete!\n");
-
-    }
-
-    public static void findLongestShortestPath(Graph graph) {
-
-        int pivot = (int) (Math.random() * graph.getNodeNum());
-
-        CheckTable table = new CheckTable(graph.getNodeNum());
-
-        List<Edge> result = new ArrayList<>();
-
-        while (!table.isAllChecked()) {
-
-            Object[] obj = graph.dijkstra(pivot);
-
-            List<Integer> internals = Graph.internalNodes(obj[0]);
-            Edge longest = Graph.longest(obj[3]);
-
-            result.add(longest);
-
-            // Check inspected Nodes.
-            table.check(internals);
-
-            // Choose random node in external graph
-            pivot = table.getUnchecked();
-
-            System.out.printf("검사한 노드 수 : %7d      남은 노드 수 : %7d\r", table.getCount(),
-                    table.getTableSize() - table.getCount());
-        }
-
-        System.out.printf("\n\n");
-
-        System.out.println("+++++ longest shortest path rank +++++");
-        Collections.sort(result, Collections.reverseOrder());
-
-        for (int i = 0; i < 20; i++) {
-            System.out.printf("%d. %s\n", i + 1, result.get(i));
-        }
-
-        System.out.println("모두 조사 완료!");
 
     }
 
