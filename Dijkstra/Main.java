@@ -11,13 +11,14 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int nodeNum = 1000000;
-        String filename = String.format("./%d.graph", nodeNum);
+        // int nodeNum = 1000000;
+        // String filename = String.format("./%d.graph", nodeNum);
+        // Graph graph = new Graph(filename, nodeNum);
 
-        Graph graph = new Graph(filename, nodeNum);
-
-        heuristic_findLongestShortestPath(graph);
+        // heuristic_findLongestShortestPath(graph);
         // findLongestShortestPath(graph);
+
+        test()
 
     }
 
@@ -31,12 +32,21 @@ public class Main {
 
         CheckTable table = new CheckTable(graph.getNodeNum());
 
+        boolean k = true;
+
         while (!table.isAllChecked()) {
 
             Edge edge = search_order.poll();
 
             if (!table.show(edge.dst)) {
-                int pivot = edge.dst;
+                int pivot;
+                if (k) {
+                    pivot = 842487;
+                    k = false;
+                } else {
+                    pivot = edge.dst;
+                }
+                // int pivot = edge.dst;
                 Object[] obj = graph.dijkstra(pivot);
 
                 List<Integer> internals = Graph.internalNodes(obj[0]);
